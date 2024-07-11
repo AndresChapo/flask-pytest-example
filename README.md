@@ -13,3 +13,6 @@ which includes
 * pytest
 
 then run the `pytest` command 
+
+or to run an specific test run 
+`pytest tests/test_routes.py::TestClass::test_name`

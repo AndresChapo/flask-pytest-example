@@ -1,20 +1,17 @@
 import json
-from handlers.routes import configure_routes
 
 class TestRoutes:
+    """ Examples using pytest fixtures """
 
-    def test_base_route(self, app):
-        configure_routes(app)
-        client = app.test_client()
-        url = '/'
+    def test_ping(self, app, api_client):
+        """ Example using pytest fixtures """
 
-        response = client.get(url)
-        assert response.get_data() == b'Hello, World!'
+        url = '/ping'        
+        response = api_client.get(url)
+        assert response.get_data() == b'pong'
         assert response.status_code == 200
 
-
     def test_post_route__success(self, app):
-        configure_routes(app)
         client = app.test_client()
         url = '/post/test'
 
@@ -35,7 +32,6 @@ class TestRoutes:
 
 
     def test_post_route__failure__unauthorized(self, app):
-        configure_routes(app)
         client = app.test_client()
         url = '/post/test'
 
@@ -54,7 +50,6 @@ class TestRoutes:
 
 
     def test_post_route__failure__bad_request(self, app):
-        configure_routes(app)
         client = app.test_client()
         url = '/post/test'
 

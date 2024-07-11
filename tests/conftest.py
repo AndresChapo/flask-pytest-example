@@ -1,4 +1,5 @@
 import json
+from flask import session
 import pytest
 from app import create_app
 
@@ -10,10 +11,13 @@ access_token=''
 
 @pytest.fixture(autouse=True)
 def app():
-    app = create_app()
+    app = create_app(session)
     app.config["TESTING"] = True
     yield app
 
+@pytest.fixture(autouse=True)
+def client(app):
+    yield app.test_client()
 
 @pytest.fixture
 def api_client(client):
@@ -95,8 +99,8 @@ def api_client(client):
                 url,
                 content_type="application/json",
                 headers=headers,
-                query_string=query_string,
-                environ_base=environ_base,
+                query_string=query_string
+#                environ_base=environ_base,
             )
 
         def delete(self, url, data, headers=None):
