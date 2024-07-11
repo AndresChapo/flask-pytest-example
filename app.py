@@ -2,7 +2,6 @@ import os
 import sqlite3
 from flask import Flask
 from database import Base
-from handlers.routes import configure_routes
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
@@ -10,10 +9,19 @@ from sqlalchemy.orm import sessionmaker
 DATABASE_URI='sqlite:///users.db'
 TEST_DATABASE_URI='sqlite:///test_users.db'
 
+def register_blueprints(app):
+    """Register blueprint endpoints"""
+
+    from handlers.routes import example_endpoints_blueprint
+
+    app.register_blueprint(example_endpoints_blueprint)
+
+
 def create_app(session):
     app = Flask(__name__)
     app.config['DATABASE_URI'] = DATABASE_URI
     app.config['DB_SESSION'] = session
+    register_blueprints(app)
     return app
 
 def create_db_session(database_uri):
@@ -32,7 +40,7 @@ def create_db_session(database_uri):
 
 session = create_db_session(DATABASE_URI)
 app = create_app(session)
-configure_routes(app)
+
 
 if __name__ == '__main__':
     app.run()
