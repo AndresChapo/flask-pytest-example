@@ -34,7 +34,7 @@ def api_client(client):
                 )
             return headers
 
-        def post(self, url, data, headers=None, environ_base=None, authenticated=True):
+        def post(self, url, data, headers=None, environ_base={}, authenticated=True):
             headers = self._check_headers(headers=headers, authenticated=authenticated)
 
             return self.client.post(
@@ -45,7 +45,7 @@ def api_client(client):
                 environ_base=environ_base,
             )
 
-        def post_form(self, url, data, headers, environ_base=None, authenticated=True):
+        def post_form(self, url, data, headers, environ_base={}, authenticated=True):
             headers = self._check_headers(headers=headers, authenticated=authenticated)
 
             return self.client.post(
@@ -57,7 +57,7 @@ def api_client(client):
             )
 
         def post_form_file(
-            self, url, data, headers, environ_base=None, authenticated=True
+            self, url, data, headers, environ_base={}, authenticated=True
         ):
             headers = self._check_headers(headers=headers, authenticated=authenticated)
 
@@ -69,7 +69,7 @@ def api_client(client):
                 environ_base=environ_base,
             )
 
-        def patch_form(self, url, data, headers, environ_base=None, authenticated=True):
+        def patch_form(self, url, data, headers, environ_base={}, authenticated=True):
             headers = self._check_headers(headers=headers, authenticated=authenticated)
 
             return self.client.patch(
@@ -90,7 +90,7 @@ def api_client(client):
             url,
             headers=None,
             query_string=None,
-            environ_base=None,
+            environ_base={},
             authenticated=True,
         ):
             headers = self._check_headers(headers=headers, authenticated=authenticated)
@@ -99,8 +99,8 @@ def api_client(client):
                 url,
                 content_type="application/json",
                 headers=headers,
-                query_string=query_string
-#                environ_base=environ_base,
+                query_string=query_string,
+                environ_base=environ_base,
             )
 
         def delete(self, url, data, headers=None):
