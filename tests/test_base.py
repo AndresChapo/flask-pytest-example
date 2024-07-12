@@ -2,7 +2,7 @@ from app import create_app
 
 def test_base_route_raw():
         """ Example without using pytest fixtures """
-        app = create_app(None)
+        app = create_app()
         app.config["TESTING"] = True
         client = app.test_client()
         url = '/'

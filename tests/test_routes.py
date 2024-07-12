@@ -1,5 +1,4 @@
 
-
 class TestRoutes:
     """ Examples using pytest fixtures """
 
@@ -30,7 +29,6 @@ class TestRoutes:
         response = api_client.post(url, data=mock_request_data, headers=mock_request_headers)
         assert response.status_code == 200
 
-
     def test_post_route__failure__unauthorized(self, api_client):
         """Run post/test without auth"""
 
@@ -48,7 +46,6 @@ class TestRoutes:
 
         response = api_client.post(url, data=mock_request_data, headers=mock_request_headers)
         assert response.status_code == 401
-
 
     def test_post_route__failure__bad_request(self, api_client):
         """Run post/test and provoke a bad request"""

@@ -1,6 +1,6 @@
 from flask import Blueprint, current_app, request
 import json
-
+from database import session
 from models.users_model import User
 
 example_endpoints_blueprint = Blueprint("example_endpoints", __name__)
@@ -42,21 +42,13 @@ def create_user():
     password = data.get('password')
 
     if name and email and password:
-        u = User()
-        u.name = name
-        u.email = email
-        u.password = password
-
-        session = current_app.config['DB_SESSION']
-        session.add(u)
-        session.commit()
+        u = User().create(name, email, password)
         return {'id': u.id, 'name': u.name, 'email': u.email}, 200
     else:
         return 'Bad Request', 400
 
 @example_endpoints_blueprint.route('/users')
 def get_users():
-    session = current_app.config['DB_SESSION']
     users = session.query(User).all()
     # Convert query results into a list of dictionaries
     response = [{'id': u.id, 'name': u.name, 'email': u.email} for u in users]

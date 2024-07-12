@@ -1,23 +1,29 @@
 import json
-from flask import session
 import pytest
 from app import create_app
+from database import create_db_session
 
 class Constants:
     class HttpHeaders:
         AUTHORIZATION = 'Authorization'
 
 access_token=''
+TEST_DATABASE_URI='sqlite:///test_users.db'
 
 @pytest.fixture(autouse=True)
 def app():
-    app = create_app(session)
+    app = create_app()
     app.config["TESTING"] = True
     yield app
 
 @pytest.fixture(autouse=True)
 def client(app):
     yield app.test_client()
+
+@pytest.fixture
+def session():
+    session = create_db_session(TEST_DATABASE_URI)
+    return session
 
 @pytest.fixture
 def api_client(client):

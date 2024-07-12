@@ -1,13 +1,8 @@
-import os
-import sqlite3
 from flask import Flask
-from database import Base
-from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from database import session
 
-#SQLALCHEMY_DATABASE_URI='postgresql://postgres:postgres@db:5432/postgres'
 DATABASE_URI='sqlite:///users.db'
-TEST_DATABASE_URI='sqlite:///test_users.db'
+
 
 def register_blueprints(app):
     """Register blueprint endpoints"""
@@ -16,31 +11,18 @@ def register_blueprints(app):
 
     app.register_blueprint(example_endpoints_blueprint)
 
-
-def create_app(session):
-    app = Flask(__name__)
+def register_env_vars(app):
     app.config['DATABASE_URI'] = DATABASE_URI
     app.config['DB_SESSION'] = session
+
+def create_app():
+    app = Flask(__name__)
     register_blueprints(app)
     return app
 
-def create_db_session(database_uri):
-    # Crear un motor que almacena los datos en la base de datos SQLite local llamada "users.db"
-    engine = create_engine(database_uri)
+app = create_app()
 
-    # Crear todas las tablas en la base de datos
-    Base.metadata.create_all(engine)
-
-    Session = sessionmaker()
-    Session.configure(bind=engine)
-
-    # Crear una nueva sesión
-    session = Session()
-    return session
-
-session = create_db_session(DATABASE_URI)
-app = create_app(session)
-
+register_env_vars(app)
 
 if __name__ == '__main__':
     app.run()
