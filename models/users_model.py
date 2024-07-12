@@ -22,3 +22,6 @@ class User(Base):
         session.commit()
         return u
     
+    @staticmethod
+    def get_users_list():
+        return session.query(User).all()

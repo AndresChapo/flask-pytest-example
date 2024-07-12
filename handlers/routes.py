@@ -49,7 +49,7 @@ def create_user():
 
 @example_endpoints_blueprint.route('/users')
 def get_users():
-    users = session.query(User).all()
+    users = User().get_users_list()
     # Convert query results into a list of dictionaries
     response = [{'id': u.id, 'name': u.name, 'email': u.email} for u in users]
 
