@@ -1,6 +1,6 @@
 from flask import Blueprint, current_app, request
 import json
-from database import session
+from database import db_session
 from models.users_model import User
 
 example_endpoints_blueprint = Blueprint("example_endpoints", __name__)

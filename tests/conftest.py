@@ -1,7 +1,7 @@
 import json
 import pytest
 from app import create_app
-from database import create_db_session
+from database import create_db_session, init_db, db_session
 
 class Constants:
     class HttpHeaders:
@@ -21,9 +21,22 @@ def client(app):
     yield app.test_client()
 
 @pytest.fixture
-def session():
-    session = create_db_session(TEST_DATABASE_URI)
-    return session
+def db_session_x():
+    global db_session
+    db_session = create_db_session(TEST_DATABASE_URI)
+    return db_session
+
+@pytest.fixture(scope='function')
+def db_session():
+    connection, trans = init_db(TEST_DATABASE_URI)
+
+    db_session.configure(bind=connection)
+
+    yield db_session
+
+    trans.rollback()
+    db_session.remove()
+    connection.close()
 
 @pytest.fixture
 def api_client(client):
