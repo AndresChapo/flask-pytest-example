@@ -1,6 +1,6 @@
-from flask import app
+
 from sqlalchemy import Column, Integer, String
-from database import Base, db_session
+from database import Base, Database
 
 
 class User(Base):
@@ -17,11 +17,12 @@ class User(Base):
         u.name = name
         u.email = email
         u.password = password
-
-        db_session.add(u)
-        db_session.commit()
+        db = Database()
+        db.session.add(u)
+        db.session.commit()
         return u
     
     @staticmethod
     def get_users_list():
-        return db_session.query(User).all()
+        db = Database()
+        return db.session.query(User).all()
