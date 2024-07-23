@@ -1,4 +1,5 @@
-from app import create_app
+from base import create_app
+
 
 def test_base_route_raw():
         """ Example without using pytest fixtures """

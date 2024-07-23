@@ -1,7 +1,8 @@
 import json
 import pytest
-from app import create_app
-from database import create_db_session, init_db, db_session
+from base import create_app
+from database import Database
+
 
 class Constants:
     class HttpHeaders:
@@ -9,6 +10,18 @@ class Constants:
 
 access_token=''
 TEST_DATABASE_URI='sqlite:///test_users.db'
+
+@pytest.fixture(scope='session', autouse=True)
+def db_session():
+    db = Database(TEST_DATABASE_URI)
+
+    db.session.configure(bind=db.connection)
+
+    yield db.session
+
+    db.trans.rollback()
+    db.session.remove()
+    db.connection.close()
 
 @pytest.fixture(autouse=True)
 def app():
@@ -19,24 +32,6 @@ def app():
 @pytest.fixture(autouse=True)
 def client(app):
     yield app.test_client()
-
-@pytest.fixture
-def db_session_x():
-    global db_session
-    db_session = create_db_session(TEST_DATABASE_URI)
-    return db_session
-
-@pytest.fixture(scope='function')
-def db_session():
-    connection, trans = init_db(TEST_DATABASE_URI)
-
-    db_session.configure(bind=connection)
-
-    yield db_session
-
-    trans.rollback()
-    db_session.remove()
-    connection.close()
 
 @pytest.fixture
 def api_client(client):
